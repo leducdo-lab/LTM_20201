@@ -1,0 +1,11 @@
+CREATE DATABASE Checker
+USE Checker
+GO
+CREATE TABLE Users(
+	UserID INT IDENTITY(1,1),
+	Name VARCHAR(30),
+	Pass VARCHAR(30),
+	Score INT DEFAULT 0,
+	PRIMARY KEY (UserID)
+);
+INSERT INTO Users VALUES('DuongNeb','KongfuPanDa',10);
