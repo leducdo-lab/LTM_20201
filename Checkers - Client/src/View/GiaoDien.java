@@ -27,19 +27,26 @@ public class GiaoDien extends JPanel {
 		this.setLayout(null);
 		this.setBackground(new Color(56,15,3));
 
-		JButton btnChiNguNhin = new JButton("\u0111\u0103ng nh\u1EADp");
-		btnChiNguNhin.setBounds(599, 220, 274, 50);
-		this.add(btnChiNguNhin);
-
-		JButton btnChiCngBn = new JButton("\u0111\u0103ng k\u00FD");
-		btnChiCngBn.addActionListener(new ActionListener() {
+		JButton btnDangNhap = new JButton("\u0111\u0103ng nh\u1EADp");
+		btnDangNhap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Login login = new Login(frameApp);
+				
+			}
+		});
+		btnDangNhap.setBounds(599, 220, 274, 50);
+		this.add(btnDangNhap);
+		
+		
+		JButton btnDangKy = new JButton("\u0111\u0103ng k\u00FD");
+		btnDangKy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Signup signup = new Signup(frameApp);
 				
 			}
 		});
-		btnChiCngBn.setBounds(599, 294, 274, 50);
-		this.add(btnChiCngBn);
+		btnDangKy.setBounds(599, 294, 274, 50);
+		this.add(btnDangKy);
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon("src/View/master_checker.png"));
