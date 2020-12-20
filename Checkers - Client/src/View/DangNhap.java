@@ -43,7 +43,7 @@ public class DangNhap extends JPanel {
 		JButton btnTaoPhong = new JButton("T\u1EA1o Ph\u00F2ng");
 		btnTaoPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SquarePanel square = new SquarePanel(frameApp);
+//				SquarePanel square = new SquarePanel(frameApp);
 			}
 		});
 		btnTaoPhong.setBounds(623, 235, 274, 50);
