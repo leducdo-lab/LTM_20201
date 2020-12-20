@@ -8,6 +8,7 @@ import Handler.Controller;
 import Handler.MyMouseListener;
 import Model.Player;
 import View.BoardPanel;
+import View.DangNhap;
 import View.GiaoDien;
 
 import java.io.*;
@@ -44,7 +45,7 @@ public class ClientApp extends JFrame {
 
 		try {
 			PropertyManager pm = PropertyManager.getInstance();
-			address = "172.18.91.113";
+			address = "127.0.0.1";
 			port = 50800;
 
 			String name = "50800";
@@ -106,8 +107,8 @@ public class ClientApp extends JFrame {
 	
 	public void waitRoom() {
 		
-		GiaoDien giaoDien = new GiaoDien(this);
-		
-		this.add(giaoDien);
+//		GiaoDien giaoDien = new GiaoDien(this);
+		DangNhap dangNhap = new DangNhap(this);
+		this.add(dangNhap);
 	}
 }
