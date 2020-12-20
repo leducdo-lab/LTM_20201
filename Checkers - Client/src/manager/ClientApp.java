@@ -45,7 +45,7 @@ public class ClientApp extends JFrame {
 
 		try {
 			PropertyManager pm = PropertyManager.getInstance();
-			address = "127.0.0.1";
+			address = "192.181.190.104";
 			port = 50800;
 
 			String name = "50800";
@@ -107,8 +107,8 @@ public class ClientApp extends JFrame {
 	
 	public void waitRoom() {
 		
-//		GiaoDien giaoDien = new GiaoDien(this);
-		DangNhap dangNhap = new DangNhap(this);
-		this.add(dangNhap);
+		GiaoDien giaoDien = new GiaoDien(this);
+//		DangNhap dangNhap = new DangNhap(this);
+		this.add(giaoDien);
 	}
 }
