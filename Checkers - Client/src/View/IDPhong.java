@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import manager.ClientApp;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -19,6 +20,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.awt.event.ActionEvent;
 
 public class IDPhong extends JFrame {
 
@@ -54,6 +58,39 @@ public class IDPhong extends JFrame {
 		textField.setColumns(10);
 
 		JButton btnJ = new JButton("Join");
+		btnJ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField.getText() != null) {
+					String roomID = textField.getText();
+					if(!roomID.matches("(\\d+)?")) {
+						JOptionPane.showMessageDialog(new JFrame(), "Khong ton tai room ID","Inane error", JOptionPane.ERROR_MESSAGE);
+					}else {
+						try {
+							frameApp.toServer.writeBytes("322 "+roomID+" "+frameApp.player.getPlayerID()+"\n");
+							String giveString = frameApp.fromServer.readLine();
+							String noi[] = giveString.split(" ", 2);
+							int code = Integer.parseInt(noi[0]);
+							switch (code) {
+							case 232:
+								JOptionPane.showMessageDialog(new JFrame(), noi[1],"Inane error", JOptionPane.ERROR_MESSAGE);
+								break;
+							case 322:
+								//switch to play room
+								dispose();
+								break;
+
+							default:
+								break;
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						// switch to room
+					}
+				}
+			}
+		});
 		btnJ.setBounds(132, 137, 117, 37);
 		contentPane.add(btnJ);
 	}

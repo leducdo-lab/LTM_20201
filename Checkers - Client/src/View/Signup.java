@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import manager.ClientApp;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -70,12 +72,30 @@ public class Signup extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nameString = textField.getText();
 				String passwordString = textField_1.getText();
-				String sendString = "500 " +nameString + " " + passwordString + "\n";
-				try {
-					frameApp.toServer.writeBytes(sendString);
+				if(nameString.indexOf(' ') != -1 || passwordString.indexOf(' ') != -1) {
+					JOptionPane.showMessageDialog(new JFrame(), "Khong nhap space","Inane error", JOptionPane.ERROR_MESSAGE);
+				}else {
+					String sendString = "500 " +nameString + " " + passwordString + "\n";
+					try {
+						frameApp.toServer.writeBytes(sendString);
+						String giveString = frameApp.fromServer.readLine();
+						String[] noi = giveString.split(" ", 2);
+						int code = Integer.parseInt(noi[0]);
+						if(code == 232) 
+							JOptionPane.showMessageDialog(new JFrame(), noi[1], "Inane error", JOptionPane.ERROR_MESSAGE);
+						else {
+							String[] player = noi[1].split(" ");
+							frameApp.player.setPlayerID(Integer.parseInt(player[0]));
+							frameApp.player.setName(nameString);
+							frameApp.player.setSocre(Integer.parseInt(player[1]));
+							frameApp.logined();
+							dispose();
+					}
+					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
 				}
 			}
 		});

@@ -9,3 +9,12 @@ CREATE TABLE Users(
 	PRIMARY KEY (UserID)
 );
 INSERT INTO Users VALUES('DuongNeb','KongfuPanDa',10);
+
+CREATE TABLE Room(
+	RoomID INT IDENTITY(1,1),
+	RMaster INT,
+	UserID INT,
+	PRIMARY KEY (RoomID),
+	FOREIGN KEY (RMaster) REFERENCES Users(UserID),
+	FOREIGN KEY (UserID) REFERENCES Users(UserID)
+)

@@ -1,3 +1,4 @@
+package Manager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class ServerMain {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "123456";
+	     String password = "do@1230.com";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	 

@@ -1,11 +1,6 @@
 /EnumConstants/
+/Manager/
 /Model/
-/PropertyManager.class
-/ServerApp.class
-/ServerMain.class
-/Session/
-<<<<<<< HEAD
-=======
-/config.properties
->>>>>>> 9675188631fb86908534b84936f5e2927471ace1
 /SQL/
+/Session/
+/config.properties
