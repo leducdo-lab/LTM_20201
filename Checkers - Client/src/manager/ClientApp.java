@@ -30,22 +30,25 @@ public class ClientApp extends JFrame {
 	private int port;
 
 	// Model
-	private Player player;
+	public Player player;
 
 	// View
 	private BoardPanel boardPanel;
 
 	// Network properties
 	private Socket connection;
-	public DataInputStream fromServer;
+	public BufferedReader fromServer;
 	public DataOutputStream toServer;
+	
+	GiaoDien giaoDien;
+	DangNhap dangNhap;
 
 	// Constructor
 	public ClientApp() {
 
 		try {
 			PropertyManager pm = PropertyManager.getInstance();
-			address = "192.181.190.104";
+			address = "127.0.0.1";
 			port = 50800;
 
 			String name = "50800";
@@ -72,15 +75,15 @@ public class ClientApp extends JFrame {
 			connection = new Socket(address, port);
 
 			// Should error occurs, handle it in a seperate thread (under try)
-			fromServer = new DataInputStream(connection.getInputStream());
+			fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			toServer = new DataOutputStream(connection.getOutputStream());
 
 			// First player get 1 and second player get 2
-			player.setPlayerID(fromServer.readInt());
-			
-			Controller task = new Controller(player, fromServer, toServer);
-			setup(task);
-			new Thread(task).start();
+//			player.setPlayerID(fromServer.readInt());
+//			
+//			Controller task = new Controller(player, fromServer, toServer);
+//			setup(task);
+//			new Thread(task).start();
 			
 			//Vao Trang dang ky/ dang nhap
 			waitRoom();
@@ -107,8 +110,14 @@ public class ClientApp extends JFrame {
 	
 	public void waitRoom() {
 		
-		GiaoDien giaoDien = new GiaoDien(this);
+		giaoDien = new GiaoDien(this);
 //		DangNhap dangNhap = new DangNhap(this);
 		this.add(giaoDien);
+	}
+	
+	public void logined() {
+		giaoDien.setVisible(false);
+		dangNhap = new DangNhap(this);
+		this.add(dangNhap);
 	}
 }

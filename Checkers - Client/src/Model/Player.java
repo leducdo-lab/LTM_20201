@@ -13,7 +13,8 @@ public class Player {
 	private String name;
 	private int playerID;
 	private boolean myTurn;
-	
+	private int socre;
+	private int roomID;
 	
 	public Player(String name){
 		this.name = name;
@@ -44,7 +45,26 @@ public class Player {
 	public void setMyTurn(boolean myTurn) {
 		this.myTurn = myTurn;
 	}
-	
+
+	public int getSocre() {
+		return socre;
+	}
+
+	public void setSocre(int socre) {
+		this.socre = socre;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getRoomID() {
+		return roomID;
+	}
+
+	public void setRoomID(int roomID) {
+		this.roomID = roomID;
+	}
 
 	
 	
