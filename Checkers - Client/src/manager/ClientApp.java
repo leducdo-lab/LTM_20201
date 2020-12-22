@@ -41,7 +41,7 @@ public class ClientApp extends JFrame {
 	public DataOutputStream toServer;
 	
 	GiaoDien giaoDien;
-	DangNhap dangNhap;
+	public DangNhap dangNhap;
 
 	// Constructor
 	public ClientApp() {
@@ -79,14 +79,14 @@ public class ClientApp extends JFrame {
 			toServer = new DataOutputStream(connection.getOutputStream());
 
 			// First player get 1 and second player get 2
-//			player.setPlayerID(fromServer.readInt());
-//			
-//			Controller task = new Controller(player, fromServer, toServer);
-//			setup(task);
-//			new Thread(task).start();
+			player.setPlayerID(fromServer.read());
+			
+			Controller task = new Controller(player, fromServer, toServer);
+			setup(task);
+			new Thread(task).start();
 			
 			//Vao Trang dang ky/ dang nhap
-			waitRoom();
+//			waitRoom();
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Internal Server Error - Check your IPv4-Address", "Error",
 					JOptionPane.ERROR_MESSAGE, null);
@@ -97,21 +97,22 @@ public class ClientApp extends JFrame {
 			System.exit(0);
 		}
 	}
-
 	private void setup(Controller c) {
 		MyMouseListener listener = new MyMouseListener();
 		listener.setController(c);
 
 		boardPanel = new BoardPanel(listener);
+		boardPanel.setSize(720, 730);
 		c.setBoardPanel(boardPanel);
-		boardPanel.setVisible(false);
-		add(boardPanel);
+		this.add(boardPanel);
+		
 	}
+	
 	
 	public void waitRoom() {
 		
 		giaoDien = new GiaoDien(this);
-//		DangNhap dangNhap = new DangNhap(this);
+
 		this.add(giaoDien);
 	}
 	

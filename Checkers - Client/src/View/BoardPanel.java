@@ -29,6 +29,7 @@ public class BoardPanel extends JPanel {
 
 	public BoardPanel(MyMouseListener listener){
 		setPreferredSize(panelSize);
+		setLocation(0, 0);
 		setLayout(new GridLayout(8,8));
 		
 		boardModel = new Board();
