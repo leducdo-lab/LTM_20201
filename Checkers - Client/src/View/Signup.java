@@ -44,16 +44,16 @@ public class Signup extends JFrame {
 		label.setBounds(5, 5, 430, 0);
 		contentPane.add(label);
 
-		JLabel lblngK = new JLabel("\u0111\u0103ng k\u00FD");
+		JLabel lblngK = new JLabel("Đăng ký");
 		lblngK.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblngK.setBounds(163, 17, 138, 22);
 		contentPane.add(lblngK);
 
-		JLabel lblUsername = new JLabel("T\u00EAn :");
+		JLabel lblUsername = new JLabel("User name:");
 		lblUsername.setBounds(30, 84, 106, 15);
 		contentPane.add(lblUsername);
 
-		JLabel lblPassword = new JLabel("M\u1EADt kh\u1EA9u :");
+		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(30, 137, 106, 15);
 		contentPane.add(lblPassword);
 
@@ -77,8 +77,12 @@ public class Signup extends JFrame {
 				}else {
 					String sendString = "500 " +nameString + " " + passwordString + "\n";
 					try {
+						
+						
 						frameApp.toServer.writeBytes(sendString);
 						String giveString = frameApp.fromServer.readLine();
+						
+						
 						String[] noi = giveString.split(" ", 2);
 						int code = Integer.parseInt(noi[0]);
 						if(code == 232) 
