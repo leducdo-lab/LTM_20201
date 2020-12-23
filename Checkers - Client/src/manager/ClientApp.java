@@ -37,7 +37,7 @@ public class ClientApp extends JFrame {
 
 	// Network properties
 	private Socket connection;
-	public BufferedReader fromServer;
+	public DataInputStream fromServer;
 	public DataOutputStream toServer;
 	
 	GiaoDien giaoDien;
@@ -75,18 +75,19 @@ public class ClientApp extends JFrame {
 			connection = new Socket(address, port);
 
 			// Should error occurs, handle it in a seperate thread (under try)
-			fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			//fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			fromServer = new DataInputStream(connection.getInputStream());
 			toServer = new DataOutputStream(connection.getOutputStream());
 
 			// First player get 1 and second player get 2
 //			player.setPlayerID(fromServer.readInt());
-//			
-//			Controller task = new Controller(player, fromServer, toServer);
-//			setup(task);
-//			new Thread(task).start();
+			player.setPlayerID(1);
+			Controller task = new Controller(player, fromServer, toServer);
+			setup(task);
+			new Thread(task).start();
 			
 			//Vao Trang dang ky/ dang nhap
-			waitRoom();
+			//waitRoom();
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Internal Server Error - Check your IPv4-Address", "Error",
 					JOptionPane.ERROR_MESSAGE, null);
@@ -104,7 +105,7 @@ public class ClientApp extends JFrame {
 
 		boardPanel = new BoardPanel(listener);
 		c.setBoardPanel(boardPanel);
-		boardPanel.setVisible(false);
+		//boardPanel.setVisible(false);
 		add(boardPanel);
 	}
 	

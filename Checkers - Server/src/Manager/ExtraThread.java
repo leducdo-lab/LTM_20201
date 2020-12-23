@@ -135,7 +135,7 @@ public class ExtraThread extends Thread {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "do@1230.com";
+	     String password = "123456";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	     Connection conn = null;

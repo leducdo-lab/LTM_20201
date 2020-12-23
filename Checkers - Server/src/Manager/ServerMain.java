@@ -18,7 +18,7 @@ public class ServerMain {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "do@1230.com";
+	     String password = "123456";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	 
@@ -33,16 +33,6 @@ public class ServerMain {
 	}
 
 	public static void main(String[] args) {
-		
-		try {
-			ConnectDB();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		ServerApp server = new ServerApp();
 		server.setSize(400,250);
