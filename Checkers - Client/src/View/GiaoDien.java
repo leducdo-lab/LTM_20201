@@ -23,7 +23,7 @@ public class GiaoDien extends JPanel {
 	private ClientApp frameApp;
 	public GiaoDien(ClientApp frame) {
 		frameApp = frame;
-		setSize(900,600);
+		setSize(900,710);
 		this.setLayout(null);
 		this.setBackground(new Color(56,15,3));
 

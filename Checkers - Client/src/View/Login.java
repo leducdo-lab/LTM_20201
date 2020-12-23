@@ -51,11 +51,11 @@ public class Login extends JFrame {
 		lblngNhp.setBounds(161, 12, 148, 36);
 		contentPane.add(lblngNhp);
 
-		JLabel lblUsername = new JLabel("T\\u00EAn :");
+		JLabel lblUsername = new JLabel("User name");
 		lblUsername.setBounds(30, 84, 106, 15);
 		contentPane.add(lblUsername);
 
-		JLabel lblPassword = new JLabel("M\\u1EADt kh\\u1EA9u: ");
+		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(30, 137, 106, 15);
 		contentPane.add(lblPassword);
 
@@ -79,9 +79,12 @@ public class Login extends JFrame {
 				}else {
 					String sendString = "501 " +nameString + " " + passwordString+"\n";
 					try {
+						
 						frameApp.toServer.writeBytes(sendString);
 						
 						String giveString = frameApp.fromServer.readLine();
+						
+						
 						String[] noi = giveString.split(" ", 2);
 						int code = Integer.parseInt(noi[0]);
 						if(code == 232) 

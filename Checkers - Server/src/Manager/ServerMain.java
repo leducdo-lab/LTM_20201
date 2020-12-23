@@ -18,6 +18,7 @@ public class ServerMain {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
+
 	     String password = "123456";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;

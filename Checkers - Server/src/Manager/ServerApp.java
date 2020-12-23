@@ -1,5 +1,6 @@
 package Manager;
 import java.awt.BorderLayout;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -70,7 +71,7 @@ public class ServerApp extends JFrame {
 				information.append(player1.getInetAddress().getHostAddress() + "\n");
 				
 				//Notification to player1 that's he's connected successfully
-				//new DataOutputStream(player1.getOutputStream()).writeInt(Checkers.PLAYER_ONE.getValue());
+				new DataOutputStream(player1.getOutputStream()).writeInt(Checkers.PLAYER_ONE.getValue());
 				
 				ExtraThread extraThread = new ExtraThread(player1, list);
 				

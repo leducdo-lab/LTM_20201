@@ -37,11 +37,11 @@ public class ClientApp extends JFrame {
 
 	// Network properties
 	private Socket connection;
-	public DataInputStream fromServer;
+	public BufferedReader fromServer;
 	public DataOutputStream toServer;
 	
 	GiaoDien giaoDien;
-	DangNhap dangNhap;
+	public DangNhap dangNhap;
 
 	// Constructor
 	public ClientApp() {
@@ -75,13 +75,14 @@ public class ClientApp extends JFrame {
 			connection = new Socket(address, port);
 
 			// Should error occurs, handle it in a seperate thread (under try)
-			//fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			fromServer = new DataInputStream(connection.getInputStream());
+			fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			//fromServer = new DataInputStream(connection.getInputStream());
 			toServer = new DataOutputStream(connection.getOutputStream());
 
 			// First player get 1 and second player get 2
 //			player.setPlayerID(fromServer.readInt());
 			player.setPlayerID(1);
+
 			Controller task = new Controller(player, fromServer, toServer);
 			setup(task);
 			new Thread(task).start();
@@ -98,21 +99,22 @@ public class ClientApp extends JFrame {
 			System.exit(0);
 		}
 	}
-
 	private void setup(Controller c) {
 		MyMouseListener listener = new MyMouseListener();
 		listener.setController(c);
 
 		boardPanel = new BoardPanel(listener);
+		boardPanel.setSize(720, 730);
 		c.setBoardPanel(boardPanel);
 		//boardPanel.setVisible(false);
 		add(boardPanel);
 	}
 	
+	
 	public void waitRoom() {
 		
 		giaoDien = new GiaoDien(this);
-//		DangNhap dangNhap = new DangNhap(this);
+
 		this.add(giaoDien);
 	}
 	

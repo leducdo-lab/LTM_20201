@@ -1,7 +1,9 @@
 package Model;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -13,15 +15,16 @@ import java.net.Socket;
 public class Player{
 	private int PlayerID;
 	private Socket socket;
-	private DataInputStream fromPlayer;
+	private BufferedReader fromPlayer;
 	private DataOutputStream toPlayer;
+	
 	
 	public Player(int ID, Socket s){
 		this.PlayerID = ID;
 		this.socket = s;
 		
 		try{
-			fromPlayer = new DataInputStream(socket.getInputStream());
+			fromPlayer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			toPlayer = new DataOutputStream(socket.getOutputStream());
 			
 		} catch (IOException e) {
@@ -44,7 +47,7 @@ public class Player{
 	public int receiveData(){
 		int data = 0;;
 		try{
-			data = this.fromPlayer.readInt();
+			data = this.fromPlayer.read();
 			return data;
 		}catch (IOException e) {
 			System.out.println("Waiting: No respond from Player");

@@ -56,10 +56,10 @@ public class ExtraThread extends Thread {
 					break;
 				}
 				case 322: {
-					int roomid = searchRoom(noi[2], noi[1]);
+					int roomid = searchRoom(noi[1], noi[2]);
 					String rommString;
 					if(roomid > 0) {
-						rommString = "322 "+roomid+" "+noi[2]+"\n";
+						rommString = "322 "+roomid+" "+noi[1]+"\n";
 						out.writeBytes(rommString);
 //						iterator = list.iterator();
 //						while(iterator.hasNext()) {
