@@ -66,7 +66,7 @@ public class IDPhong extends JFrame {
 						JOptionPane.showMessageDialog(new JFrame(), "Khong ton tai room ID","Inane error", JOptionPane.ERROR_MESSAGE);
 					}else {
 						try {
-							String sendString = "322 "+roomID+" "+frameApp.player.getPlayerID()+"\n";
+							String sendString = "322 "+roomID+" "+frameApp.player.gameID+"\n";
 							
 							frameApp.toServer.writeBytes(sendString);
 							
@@ -74,7 +74,7 @@ public class IDPhong extends JFrame {
 							
 							
 							String noi[] = giveString.split(" ", 2);
-							int code = Integer.parseInt(noi[0]);
+							int code = Integer.parseInt(noi[0].trim());
 							switch (code) {
 							case 232:
 								JOptionPane.showMessageDialog(new JFrame(), noi[1],"Inane error", JOptionPane.ERROR_MESSAGE);
@@ -82,7 +82,7 @@ public class IDPhong extends JFrame {
 							case 322:
 								
 								Room room = new Room(frameApp);
-								//frameApp.player.setRoomID(Integer.parseInt(noi[1].split(" ")[1]));
+								frameApp.player.setRoomID(Integer.parseInt(noi[1].split(" ")[1].trim()));
 								dispose();
 								break;
 

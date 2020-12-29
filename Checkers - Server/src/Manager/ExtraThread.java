@@ -62,19 +62,18 @@ public class ExtraThread extends Thread {
 					if(roomid > 0) {
 						rommString = "322 "+roomid+" "+noi[1]+"\n";
 						out.writeBytes(rommString);
-//						iterator = list.iterator();
-//						while(iterator.hasNext()) {
-//							ExtraThread extraThread = iterator.next();
-//							System.out.println("ohayou " +extraThread.id);
-//							if(extraThread.id == roomid) {
-//								
-//								extraThread.comeRoom(noi[2], noi[1]);
-//								HandleSession handleSession = new HandleSession(extraThread.socket, this.socket);
-//								new Thread(handleSession).start();
-//								break;
-//							}
-//							
-//						}
+						iterator = list.iterator();
+						while(iterator.hasNext()) {
+							ExtraThread extraThread = iterator.next();
+							System.out.println("ohayou " +extraThread.id);
+							if(extraThread.id == roomid) {
+								
+								extraThread.comeRoom(noi[2], noi[1]);
+								
+								break;
+							}
+							
+						}
 					} else {
 						rommString = "232 Phong khong ton tai \n";
 						out.writeBytes(rommString);
@@ -110,7 +109,21 @@ public class ExtraThread extends Thread {
 						out.writeBytes("322 "+masterID+" "+roomid+"\n");
 					}
 					break;
-					
+				
+				case 503:
+					int x = checkRoomMaster(noi[1]);
+					if(x > 0) {
+						out.writeBytes("503 1");
+						for(int index = 0; index<list.size(); i++) {
+							if(list.get(index).id == x) {
+								list.get(index).start();
+								HandleSession handleSession = new HandleSession(list.get(index).socket, this.socket);
+								new Thread(handleSession).start();
+								break;
+							}
+						}
+					}
+					break;
 				default:
 					break;
 				}
@@ -133,7 +146,7 @@ public class ExtraThread extends Thread {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "Hongthao123";
+	     String password = "do@1230.com";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	     Connection conn = null;
@@ -284,6 +297,33 @@ public class ExtraThread extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			String sendString = "322 "+userID+" "+roomID+"\n";
+			out.writeBytes(sendString);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public int checkRoomMaster(String userID) {
+		conn = Connect();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Room WHERE RMaster = "+userID);
+			if(resultSet.next()) {
+				return resultSet.getInt("UserID");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	public void start() {
+		try {
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			String sendString = "503 2\n";
 			out.writeBytes(sendString);
 			
 		} catch (IOException e) {

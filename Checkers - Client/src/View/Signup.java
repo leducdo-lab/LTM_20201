@@ -84,14 +84,14 @@ public class Signup extends JFrame {
 						String giveString = frameApp.fromServer.readLine();
 
 						String[] noi = giveString.split(" ", 2);
-						int code = Integer.parseInt(noi[0]);
+						int code = Integer.parseInt(noi[0].trim());
 						if(code == 232) 
 							JOptionPane.showMessageDialog(new JFrame(), noi[1], "Inane error", JOptionPane.ERROR_MESSAGE);
 						else {
 							String[] player = noi[1].split(" ");
-							frameApp.player.setPlayerID(Integer.parseInt(player[0]));
+							frameApp.player.gameID = Integer.parseInt(player[0].trim());
 							frameApp.player.setName(nameString);
-							frameApp.player.setSocre(Integer.parseInt(player[1]));
+							frameApp.player.setSocre(Integer.parseInt(player[1].trim()));
 							frameApp.logined();
 							dispose();
 					}
