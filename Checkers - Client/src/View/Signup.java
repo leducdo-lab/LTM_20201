@@ -78,10 +78,8 @@ public class Signup extends JFrame {
 					String sendString = "500 " +nameString + " " + passwordString + "\n";
 					try {
 						
-						
 						frameApp.toServer.writeBytes(sendString);
 						String giveString = frameApp.fromServer.readLine();
-						
 						
 						String[] noi = giveString.split(" ", 2);
 						int code = Integer.parseInt(noi[0]);

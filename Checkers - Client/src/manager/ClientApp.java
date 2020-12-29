@@ -81,14 +81,14 @@ public class ClientApp extends JFrame {
 
 			// First player get 1 and second player get 2
 //			player.setPlayerID(fromServer.readInt());
-			player.setPlayerID(1);
+			
 
-			Controller task = new Controller(player, fromServer, toServer);
-			setup(task);
-			new Thread(task).start();
+//			Controller task = new Controller(player, fromServer, toServer);
+//			setup(task);
+//			new Thread(task).start();
 			
 			//Vao Trang dang ky/ dang nhap
-			//waitRoom();
+			waitRoom();
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Internal Server Error - Check your IPv4-Address", "Error",
 					JOptionPane.ERROR_MESSAGE, null);
