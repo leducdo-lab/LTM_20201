@@ -37,54 +37,54 @@ public class HandleSession implements Runnable {
 		//Send Data back and forth		
 		try{
 				//notify Player 1 to start
-				player1.sendData(1);				
-				
-				while(continueToPlay){
-					//wait for player 1's Action
-					int from = player1.receiveData();
-					int to = player1.receiveData();
-					checkStatus(from, to);
-					updateGameModel(from, to);
 							
-					//Send Data back to 2nd Player
-					if(checkers.isOver())
-						player2.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
-					int fromStatus = player2.sendData(from);
-					int toStatus = player2.sendData(to);
-					checkStatus(fromStatus,toStatus);
 					
-					//IF game is over, break
-					if(checkers.isOver()){
-						player1.sendData(Checkers.YOU_WIN.getValue());
-						continueToPlay=false;
-						break;
+					while(continueToPlay){
+						//wait for player 1's Action
+						int from = player1.receiveData();
+						int to = player1.receiveData();
+						checkStatus(from, to);
+						updateGameModel(from, to);
+								
+						//Send Data back to 2nd Player
+						if(checkers.isOver())
+							player2.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
+						int fromStatus = player2.sendData(from);
+						int toStatus = player2.sendData(to);
+						checkStatus(fromStatus,toStatus);
+						
+						//IF game is over, break
+						if(checkers.isOver()){
+							player1.sendData(Checkers.YOU_WIN.getValue());
+							continueToPlay=false;
+							break;
+						}
+						
+						System.out.println("after break");
+						
+						//wait for player 2's Action
+						from = player2.receiveData();
+						to = player2.receiveData();
+						checkStatus(from, to);
+						updateGameModel(from, to);					
+						
+						//Send Data back to 1st Player
+						if(checkers.isOver()){
+							player1.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
+						}					
+						fromStatus = player1.sendData(from);
+						toStatus = player1.sendData(to);
+						checkStatus(fromStatus,toStatus);
+						
+						//IF game is over, break
+						if(checkers.isOver()){
+							player2.sendData(Checkers.YOU_WIN.getValue());
+							continueToPlay=false;
+							break;
+						}
+						
+						System.out.println("second break");
 					}
-					
-					System.out.println("after break");
-					
-					//wait for player 2's Action
-					from = player2.receiveData();
-					to = player2.receiveData();
-					checkStatus(from, to);
-					updateGameModel(from, to);					
-					
-					//Send Data back to 1st Player
-					if(checkers.isOver()){
-						player1.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
-					}					
-					fromStatus = player1.sendData(from);
-					toStatus = player1.sendData(to);
-					checkStatus(fromStatus,toStatus);
-					
-					//IF game is over, break
-					if(checkers.isOver()){
-						player2.sendData(Checkers.YOU_WIN.getValue());
-						continueToPlay=false;
-						break;
-					}
-					
-					System.out.println("second break");
-				}
 				
 				
 				

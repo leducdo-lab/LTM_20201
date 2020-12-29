@@ -18,17 +18,17 @@ public class ServerMain {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "Hongthao123";
+	     String password = "do@1230.com";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	 
 	     Connection conn = DriverManager.getConnection(connectionURL, userName,
 	             password);
 	     Statement statement = conn.createStatement();
-	     ResultSet rSet = statement.executeQuery("SELECT * FROM Users");
-	     while(rSet.next()) {
-	    	 System.out.println(rSet.getString("Name") + " " + rSet.getString("Pass") + " " + rSet.getString("Score") );
-	     }
+//	     ResultSet rSet = statement.executeQuery("SELECT * FROM Users");
+//	     while(rSet.next()) {
+//	    	 System.out.println(rSet.getString("Name") + " " + rSet.getString("Pass") + " " + rSet.getString("Score") );
+//	     }
 	     System.out.println("Connect ok");
 	}
 

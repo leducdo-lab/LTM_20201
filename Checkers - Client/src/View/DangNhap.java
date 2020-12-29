@@ -46,17 +46,17 @@ public class DangNhap extends JPanel {
 		btnTaoPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 //				SquarePanel square = new SquarePanel(frameApp);
-				String sendString = "223 "+frameApp.player.getPlayerID()+"\n";
+				String sendString = "223 "+frameApp.player.gameID+"\n";
 				try {
 					
 					frameApp.toServer.writeBytes(sendString);
 					
 					String giveString = frameApp.fromServer.readLine();
-					
-					
+
 					String[] roomStrings = giveString.split(" ");
-					frameApp.player.setRoomID(Integer.parseInt(roomStrings[1]));
+					frameApp.player.setRoomID(Integer.parseInt(roomStrings[1].trim()));
 					Room room = new Room(frameApp);
+					setVisible(false);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -70,19 +70,18 @@ public class DangNhap extends JPanel {
 		btnGhep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String sendString = "258 "+frameApp.player.getPlayerID()+"\n";
+					String sendString = "258 "+frameApp.player.gameID+"\n";
 
 					
 					frameApp.toServer.writeBytes(sendString);
 					
 					String giveString = frameApp.fromServer.readLine();
-					
-					
+
 					String[] noiStrings = giveString.split(" ", 2);
-					int code = Integer.parseInt(noiStrings[0]);
+					int code = Integer.parseInt(noiStrings[0].trim());
 					switch (code) {
 					case 223:
-						frameApp.player.setRoomID(Integer.parseInt(noiStrings[1]));
+						frameApp.player.setRoomID(Integer.parseInt(noiStrings[1].trim()));
 						break;
 					case 322:
 						// switch to play room
