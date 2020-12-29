@@ -60,7 +60,7 @@ public class ExtraThread extends Thread {
 					int roomid = searchRoom(noi[1], noi[2]);
 					String rommString;
 					if(roomid > 0) {
-						rommString = "322 "+roomid+" "+noi[2]+"\n";
+						rommString = "322 "+roomid+" "+noi[1]+"\n";
 						out.writeBytes(rommString);
 //						iterator = list.iterator();
 //						while(iterator.hasNext()) {
@@ -133,7 +133,7 @@ public class ExtraThread extends Thread {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "do@1230.com";
+	     String password = "Hongthao123";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	     Connection conn = null;

@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import manager.ClientApp;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -41,17 +42,20 @@ public class DangNhap extends JPanel {
 		this.setLayout(null);
 		this.setBackground(new Color(56,15,3));
 
-		JButton btnTaoPhong = new JButton("Tao Phong");
+		JButton btnTaoPhong = new JButton("Tạo phòng");
 		btnTaoPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 //				SquarePanel square = new SquarePanel(frameApp);
 				String sendString = "223 "+frameApp.player.getPlayerID()+"\n";
 				try {
+					
 					frameApp.toServer.writeBytes(sendString);
+					
 					String giveString = frameApp.fromServer.readLine();
-					System.out.println("from server(tao_phong): "+giveString);
+
 					String[] roomStrings = giveString.split(" ");
 					frameApp.player.setRoomID(Integer.parseInt(roomStrings[1]));
+					Room room = new Room(frameApp);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -65,9 +69,13 @@ public class DangNhap extends JPanel {
 		btnGhep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					frameApp.toServer.writeBytes("258 "+frameApp.player.getPlayerID()+"\n");
+					String sendString = "258 "+frameApp.player.getPlayerID()+"\n";
+
+					
+					frameApp.toServer.writeBytes(sendString);
+					
 					String giveString = frameApp.fromServer.readLine();
-					System.out.println("from server(ghep_phong): "+giveString);
+
 					String[] noiStrings = giveString.split(" ", 2);
 					int code = Integer.parseInt(noiStrings[0]);
 					switch (code) {

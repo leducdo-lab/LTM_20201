@@ -16,7 +16,7 @@ public class ClientMain {
 		client.pack();
 		client.setVisible(true);
 		client.setLocation(250, 0);
-		client.setSize(900, 600);
+		client.setSize(900, 730);
 		client.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

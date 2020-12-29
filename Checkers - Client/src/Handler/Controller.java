@@ -1,4 +1,5 @@
 package Handler;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class Controller implements Runnable {
 	private boolean isOver;
 	
 	//Network
-	private DataInputStream fromServer;
+	private BufferedReader fromServer;
 	private DataOutputStream toServer;
 	
 	private BoardPanel boardPanel;
@@ -34,9 +35,9 @@ public class Controller implements Runnable {
 	private LinkedList<Square> playableSquares;
 	//private LinkedList<Square> crossableSquares;
 	
-	public Controller(Player player, DataInputStream input, DataOutputStream output){
+	public Controller(Player player, BufferedReader fromServer2, DataOutputStream output){
 		this.player = player;
-		this.fromServer = input;
+		this.fromServer = fromServer2;
 		this.toServer= output;
 		
 		selectedSquares = new LinkedList<Square>();
@@ -58,7 +59,7 @@ public class Controller implements Runnable {
 			//Player One
 			if(player.getPlayerID()==Checkers.PLAYER_ONE.getValue()){
 				//wait for the notification to start
-				fromServer.readInt();
+				fromServer.read();
 				player.setMyTurn(true);
 			}
 					
@@ -92,17 +93,17 @@ public class Controller implements Runnable {
 	
 	private void receiveInfoFromServer() throws IOException {
 		player.setMyTurn(false);
-		int from = fromServer.readInt();
+		int from = fromServer.read();
 		if(from==Checkers.YOU_LOSE.getValue()){
-			from = fromServer.readInt();
-			int to = fromServer.readInt();
+			from = fromServer.read();
+			int to = fromServer.read();
 			updateReceivedInfo(from, to);
 			isOver=true;
 		}else if(from==Checkers.YOU_WIN.getValue()){
 			isOver=true;
 			continueToPlay=false;
 		}else{
-			int to = fromServer.readInt();
+			int to = fromServer.read();
 			updateReceivedInfo(from, to);
 		}
 	}	
