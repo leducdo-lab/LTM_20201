@@ -40,6 +40,7 @@ public class ExtraThread extends Thread {
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			while(true) {
 				String string = in.readLine();
+				System.out.println("from client: "+string);
 				String[] noi = string.split(" ");
 				int code = Integer.parseInt(noi[0]);
 				switch (code) {
@@ -61,19 +62,18 @@ public class ExtraThread extends Thread {
 					if(roomid > 0) {
 						rommString = "322 "+roomid+" "+noi[1]+"\n";
 						out.writeBytes(rommString);
-//						iterator = list.iterator();
-//						while(iterator.hasNext()) {
-//							ExtraThread extraThread = iterator.next();
-//							System.out.println("ohayou " +extraThread.id);
-//							if(extraThread.id == roomid) {
-//								
-//								extraThread.comeRoom(noi[2], noi[1]);
-//								HandleSession handleSession = new HandleSession(extraThread.socket, this.socket);
-//								new Thread(handleSession).start();
-//								break;
-//							}
-//							
-//						}
+						iterator = list.iterator();
+						while(iterator.hasNext()) {
+							ExtraThread extraThread = iterator.next();
+							System.out.println("ohayou " +extraThread.id);
+							if(extraThread.id == roomid) {
+								
+								extraThread.comeRoom(noi[2], noi[1]);
+								
+								break;
+							}
+							
+						}
 					} else {
 						rommString = "232 Phong khong ton tai \n";
 						out.writeBytes(rommString);
@@ -81,15 +81,12 @@ public class ExtraThread extends Thread {
 				}
 				case 501: {
 					int id = login(noi[1], noi[2]);
-					System.out.println(id+" aa");
 					if( id == -1) {
 						String fString = "232 Username or Password doesn't exit \n";
-						System.out.println(fString);
 						out.writeBytes(fString);
 					}else {
 						String fString = "501 "+id+" "+getScore(id)+"\n";
 						this.id = id;
-						System.out.println(fString);
 						out.writeBytes(fString);
 					}
 					break;
@@ -112,7 +109,21 @@ public class ExtraThread extends Thread {
 						out.writeBytes("322 "+masterID+" "+roomid+"\n");
 					}
 					break;
-					
+				
+				case 503:
+					int x = checkRoomMaster(noi[1]);
+					if(x > 0) {
+						out.writeBytes("503 1");
+						for(int index = 0; index<list.size(); i++) {
+							if(list.get(index).id == x) {
+								list.get(index).start();
+								HandleSession handleSession = new HandleSession(list.get(index).socket, this.socket);
+								new Thread(handleSession).start();
+								break;
+							}
+						}
+					}
+					break;
 				default:
 					break;
 				}
@@ -184,6 +195,7 @@ public class ExtraThread extends Thread {
 			Statement statement = conn.createStatement();
 			ResultSet rSet = statement.executeQuery("SELECT * FROM Users WHERE Name = '"+username+"' AND Pass = '"+password+"'");
 			
+			
 			if (rSet.next()) {
 				id = rSet.getInt("UserID");
 			}
@@ -225,19 +237,19 @@ public class ExtraThread extends Thread {
 		try {
 			Statement statement = conn.createStatement();
 			ResultSet rSet = statement.executeQuery("SELECT * FROM Room WHERE RoomID = "+roomid);
-			int id = 0;
+			int room = 0;
 			if(rSet.next()) {
-				id = rSet.getInt("RoomID");
+				room = rSet.getInt("RoomID");
 			}
-
-			if(id == 0) {
+			System.out.println(room);
+			if(room == 0) {
 				return 0;
 			} else {
 				statement.executeUpdate("UPDATE Room SET UserID = "+userid+" WHERE RoomID="+roomid);
 				ResultSet rSet2 = statement.executeQuery("SELECT * FROM Room WHERE RoomID = "+roomid);
 				rSet2.next();
-				id = rSet2.getInt("RMaster");
-				return id;
+				room = rSet2.getInt("RMaster");
+				return room;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -285,6 +297,33 @@ public class ExtraThread extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			String sendString = "322 "+userID+" "+roomID+"\n";
+			out.writeBytes(sendString);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public int checkRoomMaster(String userID) {
+		conn = Connect();
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Room WHERE RMaster = "+userID);
+			if(resultSet.next()) {
+				return resultSet.getInt("UserID");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	public void start() {
+		try {
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			String sendString = "503 2\n";
 			out.writeBytes(sendString);
 			
 		} catch (IOException e) {

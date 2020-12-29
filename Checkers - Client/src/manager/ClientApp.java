@@ -80,13 +80,19 @@ public class ClientApp extends JFrame {
 			toServer = new DataOutputStream(connection.getOutputStream());
 
 			// First player get 1 and second player get 2
+
 //			player.setPlayerID(fromServer.readInt());
 			
 
 //			Controller task = new Controller(player, fromServer, toServer);
 //			setup(task);
 //			new Thread(task).start();
+			//player.setPlayerID(1);
 			
+//			Controller task = new Controller(player, fromServer, toServer);
+//			setup(task);
+//			new Thread(task).start();
+//			
 			//Vao Trang dang ky/ dang nhap
 			waitRoom();
 		} catch (UnknownHostException e) {

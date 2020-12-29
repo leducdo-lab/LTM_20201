@@ -13,25 +13,7 @@ import javax.swing.JFrame;
  */
 public class ServerMain {
 	
-	public static void ConnectDB() throws ClassNotFoundException, SQLException{
-		String hostName = "localhost";
-	     String sqlInstanceName = "SQLEXPRESS";
-	     String database = "Checker";
-	     String userName = "SA";
 
-	     String password = "123456";
-	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
-	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
-	 
-	     Connection conn = DriverManager.getConnection(connectionURL, userName,
-	             password);
-	     Statement statement = conn.createStatement();
-	     ResultSet rSet = statement.executeQuery("SELECT * FROM Users");
-	     while(rSet.next()) {
-	    	 System.out.println(rSet.getString("Name") + " " + rSet.getString("Pass") + " " + rSet.getString("Score") );
-	     }
-	     System.out.println("Connect ok");
-	}
 
 	public static void main(String[] args) {
 		

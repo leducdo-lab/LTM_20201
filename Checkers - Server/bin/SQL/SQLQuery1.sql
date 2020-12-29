@@ -17,4 +17,12 @@ CREATE TABLE Room(
 	PRIMARY KEY (RoomID),
 	FOREIGN KEY (RMaster) REFERENCES Users(UserID),
 	FOREIGN KEY (UserID) REFERENCES Users(UserID)
+<<<<<<< HEAD
 )
+=======
+)
+
+select * from Room
+DELETE Room WHERE RoomID > 0
+select  * from Users
+>>>>>>> 2ad7b2e0f6d34fc9d5ac3e12fed8f0a12f929a87

@@ -18,3 +18,7 @@ CREATE TABLE Room(
 	FOREIGN KEY (RMaster) REFERENCES Users(UserID),
 	FOREIGN KEY (UserID) REFERENCES Users(UserID)
 )
+
+select * from Room
+DELETE Room WHERE RoomID > 0
+select  * from Users

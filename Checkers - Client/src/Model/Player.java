@@ -15,6 +15,7 @@ public class Player {
 	private boolean myTurn;
 	private int socre;
 	private int roomID;
+	public int gameID;
 	
 	public Player(String name){
 		this.name = name;
