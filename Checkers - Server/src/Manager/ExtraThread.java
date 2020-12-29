@@ -40,6 +40,7 @@ public class ExtraThread extends Thread {
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			while(true) {
 				String string = in.readLine();
+				System.out.println("from client: "+string);
 				String[] noi = string.split(" ");
 				int code = Integer.parseInt(noi[0]);
 				switch (code) {
@@ -56,7 +57,7 @@ public class ExtraThread extends Thread {
 					break;
 				}
 				case 322: {
-					int roomid = searchRoom(noi[2], noi[1]);
+					int roomid = searchRoom(noi[1], noi[2]);
 					String rommString;
 					if(roomid > 0) {
 						rommString = "322 "+roomid+" "+noi[2]+"\n";
@@ -81,15 +82,12 @@ public class ExtraThread extends Thread {
 				}
 				case 501: {
 					int id = login(noi[1], noi[2]);
-					System.out.println(id+" aa");
 					if( id == -1) {
 						String fString = "232 Username or Password doesn't exit \n";
-						System.out.println(fString);
 						out.writeBytes(fString);
 					}else {
 						String fString = "501 "+id+" "+getScore(id)+"\n";
 						this.id = id;
-						System.out.println(fString);
 						out.writeBytes(fString);
 					}
 					break;
@@ -184,6 +182,7 @@ public class ExtraThread extends Thread {
 			Statement statement = conn.createStatement();
 			ResultSet rSet = statement.executeQuery("SELECT * FROM Users WHERE Name = '"+username+"' AND Pass = '"+password+"'");
 			
+			
 			if (rSet.next()) {
 				id = rSet.getInt("UserID");
 			}
@@ -225,19 +224,19 @@ public class ExtraThread extends Thread {
 		try {
 			Statement statement = conn.createStatement();
 			ResultSet rSet = statement.executeQuery("SELECT * FROM Room WHERE RoomID = "+roomid);
-			int id = 0;
+			int room = 0;
 			if(rSet.next()) {
-				id = rSet.getInt("RoomID");
+				room = rSet.getInt("RoomID");
 			}
-
-			if(id == 0) {
+			System.out.println(room);
+			if(room == 0) {
 				return 0;
 			} else {
 				statement.executeUpdate("UPDATE Room SET UserID = "+userid+" WHERE RoomID="+roomid);
 				ResultSet rSet2 = statement.executeQuery("SELECT * FROM Room WHERE RoomID = "+roomid);
 				rSet2.next();
-				id = rSet2.getInt("RMaster");
-				return id;
+				room = rSet2.getInt("RMaster");
+				return room;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

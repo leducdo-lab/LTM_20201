@@ -23,14 +23,15 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class Signup extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField textField_1;
 
 	private ClientApp frameApp;
+	private JPasswordField passwordField;
 	public Signup(ClientApp frame) {
 		frameApp = frame;
 		setVisible(true);
@@ -61,17 +62,17 @@ public class Signup extends JFrame {
 		textField.setBounds(163, 76, 196, 32);
 		contentPane.add(textField);
 		textField.setColumns(10);
-
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(163, 129, 196, 32);
-		contentPane.add(textField_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(163, 131, 196, 32);
+		contentPane.add(passwordField);
 
 		JButton btnngK = new JButton("\u0110\u0103ng k\u00FD");
 		btnngK.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				String nameString = textField.getText();
-				String passwordString = textField_1.getText();
+				String passwordString = passwordField.getText();
 				if(nameString.indexOf(' ') != -1 || passwordString.indexOf(' ') != -1) {
 					JOptionPane.showMessageDialog(new JFrame(), "Khong nhap space","Inane error", JOptionPane.ERROR_MESSAGE);
 				}else {
@@ -79,6 +80,7 @@ public class Signup extends JFrame {
 					try {
 						frameApp.toServer.writeBytes(sendString);
 						String giveString = frameApp.fromServer.readLine();
+						System.out.println("from server(signup): "+giveString);
 						String[] noi = giveString.split(" ", 2);
 						int code = Integer.parseInt(noi[0]);
 						if(code == 232) 
@@ -101,6 +103,7 @@ public class Signup extends JFrame {
 		});
 		btnngK.setBounds(156, 196, 117, 25);
 		contentPane.add(btnngK);
+		
 	}
 
 }

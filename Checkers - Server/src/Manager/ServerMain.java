@@ -25,10 +25,10 @@ public class ServerMain {
 	     Connection conn = DriverManager.getConnection(connectionURL, userName,
 	             password);
 	     Statement statement = conn.createStatement();
-	     ResultSet rSet = statement.executeQuery("SELECT * FROM Users");
-	     while(rSet.next()) {
-	    	 System.out.println(rSet.getString("Name") + " " + rSet.getString("Pass") + " " + rSet.getString("Score") );
-	     }
+//	     ResultSet rSet = statement.executeQuery("SELECT * FROM Users");
+//	     while(rSet.next()) {
+//	    	 System.out.println(rSet.getString("Name") + " " + rSet.getString("Pass") + " " + rSet.getString("Score") );
+//	     }
 	     System.out.println("Connect ok");
 	}
 

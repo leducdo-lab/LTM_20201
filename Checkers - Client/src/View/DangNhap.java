@@ -49,6 +49,7 @@ public class DangNhap extends JPanel {
 				try {
 					frameApp.toServer.writeBytes(sendString);
 					String giveString = frameApp.fromServer.readLine();
+					System.out.println("from server(tao_phong): "+giveString);
 					String[] roomStrings = giveString.split(" ");
 					frameApp.player.setRoomID(Integer.parseInt(roomStrings[1]));
 				} catch (IOException e) {
@@ -66,6 +67,7 @@ public class DangNhap extends JPanel {
 				try {
 					frameApp.toServer.writeBytes("258 "+frameApp.player.getPlayerID()+"\n");
 					String giveString = frameApp.fromServer.readLine();
+					System.out.println("from server(ghep_phong): "+giveString);
 					String[] noiStrings = giveString.split(" ", 2);
 					int code = Integer.parseInt(noiStrings[0]);
 					switch (code) {
