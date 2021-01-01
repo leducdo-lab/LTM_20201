@@ -162,8 +162,8 @@ public class ExtraThread extends Thread {
 						kick(userID);
 						out.writeBytes("369\n");
 						if(handleSession!=null) {
-							handleSession.wait();
-							
+							//handleSession.wait();
+							handleSession = null;
 						}
 						for(int index = 0; index < list.size(); index++) {
 							if(list.get(index).id == userID) {		

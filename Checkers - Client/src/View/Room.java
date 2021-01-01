@@ -139,20 +139,24 @@ public class Room extends JPanel {
 	public void waitToPlay() {
 			JOptionPane.showMessageDialog(new JFrame(), "Wait to Room Master click start\n");
 			try {
-				String give = frameApp.fromServer.readLine();
-				String[] noiStrings =give.split(" ");
-				int code = Integer.parseInt(noiStrings[0].trim());
-				if(code == 503) {
-					startButton.setVisible(false);
-					boardPanel.setVisible(true);
-					name1.setText(noiStrings[1]);
-					if(thread != null) thread.stop();
-					thread = new Thread(task);
-					thread.start();
-				} else if(code == 369) {
-					JOptionPane.showMessageDialog(new JFrame(), "You are kicked\n");
-					this.setVisible(false);
-					frameApp.dangNhap.setVisible(true);
+				while(true) {
+					String give = frameApp.fromServer.readLine();
+					String[] noiStrings =give.split(" ");
+					int code = Integer.parseInt(noiStrings[0].trim());
+					if(code == 503) {
+						startButton.setVisible(false);
+						boardPanel.setVisible(true);
+						name1.setText(noiStrings[1]);
+						if(thread != null) thread.stop();
+						thread = new Thread(task);
+						thread.start();
+						break;
+					} else if(code == 369) {
+						JOptionPane.showMessageDialog(new JFrame(), "You are kicked\n");
+						this.setVisible(false);
+						frameApp.dangNhap.setVisible(true);
+						break;
+					}
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -177,5 +181,8 @@ public class Room extends JPanel {
 		setup(task);
 		boardPanel.setVisible(false);
 		startButton.setVisible(true);
+		if(frameApp.player.getPlayerID() == 2) {
+			waitToPlay();
+		}
 	}
 }
