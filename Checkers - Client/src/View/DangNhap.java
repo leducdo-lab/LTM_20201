@@ -26,7 +26,7 @@ import javax.swing.border.EmptyBorder;
 
 public class DangNhap extends JPanel {
 
-
+	public JLabel lblim;
 
 	/**
 	 * Launch the application.
@@ -42,10 +42,13 @@ public class DangNhap extends JPanel {
 		this.setLayout(null);
 		this.setBackground(new Color(56,15,3));
 
-		JButton btnTaoPhong = new JButton("Tạo phòng");
+		JButton btnTaoPhong = new JButton("Tao Phong");
 		btnTaoPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
+				//SquarePanel square = new SquarePanel(frameApp);
 //				SquarePanel square = new SquarePanel(frameApp);
+				frameApp.player.setPlayerID(1);
 				String sendString = "223 "+frameApp.player.gameID+"\n";
 				try {
 					
@@ -55,12 +58,14 @@ public class DangNhap extends JPanel {
 
 					String[] roomStrings = giveString.split(" ");
 					frameApp.player.setRoomID(Integer.parseInt(roomStrings[1].trim()));
-					Room room = new Room(frameApp);
+					frameApp.room = new Room(frameApp);
 					setVisible(false);
+					frameApp.room.waitToUser();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 			}
 		});
 		btnTaoPhong.setBounds(623, 235, 274, 50);
@@ -71,7 +76,6 @@ public class DangNhap extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String sendString = "258 "+frameApp.player.gameID+"\n";
-
 					
 					frameApp.toServer.writeBytes(sendString);
 					
@@ -81,10 +85,21 @@ public class DangNhap extends JPanel {
 					int code = Integer.parseInt(noiStrings[0].trim());
 					switch (code) {
 					case 223:
+						
 						frameApp.player.setRoomID(Integer.parseInt(noiStrings[1].trim()));
+						frameApp.player.setPlayerID(1);
+						frameApp.room = new Room(frameApp);
+						setVisible(false);
+						frameApp.room.waitToUser();
+						
 						break;
 					case 322:
-						// switch to play room
+						
+						frameApp.player.setRoomID(Integer.parseInt(noiStrings[1].split(" ")[1].trim()));
+						frameApp.player.setPlayerID(2);
+						frameApp.room = new Room(frameApp);
+						frameApp.room.waitToPlay();
+						
 						break;
 
 					default:
@@ -114,7 +129,7 @@ public class DangNhap extends JPanel {
 		lblNamec.setBounds(772, 11, 145, 50);
 		this.add(lblNamec);
 
-		JLabel lblim = new JLabel(frameApp.player.getSocre()+"");
+		lblim = new JLabel(frameApp.player.getSocre()+"");
 		lblim.setFont(new Font("Dialog", Font.BOLD, 28));
 		lblim.setForeground(Color.WHITE);
 		lblim.setBounds(793, 58, 70, 50);

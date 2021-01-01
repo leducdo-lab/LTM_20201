@@ -34,25 +34,28 @@ public class Player{
 	}
 	
 	public int sendData(int data){
-		try {
-			this.toPlayer.writeInt(data);
-			return 1; //Successfull
-		} catch (IOException e) {
-			System.out.println("sending: Player not found");
-			//e.printStackTrace();
-			return 99;	//failure
-		}		
+//		try {
+//			this.toPlayer.writeBytes(data+"\n");
+//			return 1; //Successfull
+//		} catch (IOException e) {
+//			System.out.println("sending: Player not found");
+//			//e.printStackTrace();
+//			return 99;	//failure
+//		}	
+		return 1;
 	}
 	
 	public int receiveData(){
 		int data = 0;;
-		try{
-			data = this.fromPlayer.read();
-			return data;
-		}catch (IOException e) {
-			System.out.println("Waiting: No respond from Player");
-			return 99;
-		}
+//		try{
+//			String give = this.fromPlayer.readLine();
+//			data = Integer.parseInt(give);
+//			return data;
+//		}catch (IOException e) {
+//			System.out.println("Waiting: No respond from Player");
+//			return 99;
+//		}
+		return data;
 	}
 	
 	public void closeConnection(){

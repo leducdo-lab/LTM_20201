@@ -1,7 +1,9 @@
 package View;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Handler.Controller;
@@ -22,6 +24,8 @@ public class Room extends JPanel {
 	Controller task;
 	JButton startButton;
 	JPanel player1;
+	JLabel name1;
+	Thread thread = null;
 	
 	public Room(ClientApp frame) {
 		
@@ -31,26 +35,32 @@ public class Room extends JPanel {
 		setLayout(null);
 		frameApp.getContentPane().add(this);
 		frameApp.setSize(900, 710);
-		task = new Controller(frameApp.player, frameApp.fromServer, frameApp.toServer);
+		task = new Controller(frameApp.player, frameApp.fromServer, frameApp.toServer,frameApp);
 		setup(task);
 		boardPanel.setVisible(false);
-		
-		System.out.println("make room ok");
-		
+				
 		startButton = new JButton("START");
 		startButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					frameApp.toServer.writeBytes("503 "+frameApp.player.gameID+"\n");
-					
-					String giveString = frameApp.fromServer.readLine();
-					String[] noi = giveString.split(" ", 2);
-					int code = Integer.parseInt(noi[0].trim());
-					if(code == 503) {
-						frameApp.player.setPlayerID(1);
-						startButton.setVisible(false);
-						boardPanel.setVisible(true);
-						new Thread(task).start();
+					while(true) {
+						String giveString = frameApp.fromServer.readLine();
+						String[] noi = giveString.split(" ", 2);
+						int code = Integer.parseInt(noi[0].trim());
+						if(code == 503) {
+							startButton.setVisible(false);
+							boardPanel.setVisible(true);
+							
+							if(thread != null) thread.stop();
+							thread = new Thread(task);
+							thread.start();
+							break;
+						}else if(code == 232) {
+							JOptionPane.showMessageDialog(new JFrame(), noi[1]);
+							break;
+						}
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -66,42 +76,54 @@ public class Room extends JPanel {
 		player1 = new JPanel();
 		player1.setLayout(null);
 		player1.setBounds(744, 158, 150, 300);
-		JLabel name1 = new JLabel("name 1");
+		name1 = new JLabel("wait");
 		name1.setBounds(0, 0, 100, 100);
 		JButton kickButton = new JButton("Kich");
+		kickButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					if(frameApp.player.getPlayerID() == 1) {
+						frameApp.toServer.writeBytes("369 "+frameApp.player.getRoomID()+" "+frameApp.player.gameID+"\n");
+						
+						String give = "";
+ 						while(give.equals("")) give = frameApp.fromServer.readLine();
+ 						while(true) {
+							if(Integer.parseInt(give.split(" ")[0].trim()) == 369) {
+								name1.setText("wait");
+								boardPanel.setVisible(false);
+								startButton.setVisible(true);
+								waitToUser();
+								thread.stop();
+								break;
+							}else {
+								give = frameApp.fromServer.readLine();
+							}
+ 						}
+					}else JOptionPane.showMessageDialog(new JFrame(), "You are not Room master","Inane error", JOptionPane.ERROR_MESSAGE);
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		kickButton.setBounds(10, 100, 100, 100);
 		player1.add(name1);
 		player1.add(kickButton);
 		add(player1);
 		
-		
-		
-		JButton quitButton = new JButton("Quit");
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-				frameApp.dangNhap.setVisible(true);
-			}
-		});
-		quitButton.setBounds(777, 636, 117, 50);
-		add(quitButton);
-		
 		JLabel roomID = new JLabel(frameApp.player.getRoomID()+"");
-		roomID.setBounds(746, 6, 148, 38);
+		roomID.setBounds(801, 16, 111, 33);
 		add(roomID);
-		try {
-			String give = frameApp.fromServer.readLine();
-			frameApp.player.setPlayerID(2);
-			startButton.setVisible(false);
-			boardPanel.setVisible(true);
-			new Thread(task).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
+		JLabel lblNewLabel = new JLabel("RoomID :");
+		lblNewLabel.setBounds(727, 20, 64, 24);
+		add(lblNewLabel);
+
 		this.setVisible(true);
-		
 	}
 	private void setup(Controller c) {
 		MyMouseListener listener = new MyMouseListener();
@@ -111,6 +133,49 @@ public class Room extends JPanel {
 		boardPanel.setSize(720, 730);
 		c.setBoardPanel(boardPanel);
 		this.add(boardPanel);
-		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void waitToPlay() {
+			JOptionPane.showMessageDialog(new JFrame(), "Wait to Room Master click start\n");
+			try {
+				String give = frameApp.fromServer.readLine();
+				String[] noiStrings =give.split(" ");
+				int code = Integer.parseInt(noiStrings[0].trim());
+				if(code == 503) {
+					startButton.setVisible(false);
+					boardPanel.setVisible(true);
+					name1.setText(noiStrings[1]);
+					if(thread != null) thread.stop();
+					thread = new Thread(task);
+					thread.start();
+				} else if(code == 369) {
+					JOptionPane.showMessageDialog(new JFrame(), "You are kicked\n");
+					this.setVisible(false);
+					frameApp.dangNhap.setVisible(true);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public void waitToUser() {
+		JOptionPane.showMessageDialog(new JFrame(), "Wait to other user\n");
+		try {
+			String give = frameApp.fromServer.readLine();
+			String[] noiStrings =give.split(" ");
+			name1.setText(noiStrings[1]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void reset() {
+		this.remove(boardPanel);
+		setup(task);
+		boardPanel.setVisible(false);
+		startButton.setVisible(true);
 	}
 }

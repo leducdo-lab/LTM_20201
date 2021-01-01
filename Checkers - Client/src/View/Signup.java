@@ -79,7 +79,6 @@ public class Signup extends JFrame {
 					String sendString = "500 " +nameString + " " + passwordString + "\n";
 					try {
 						
-						
 						frameApp.toServer.writeBytes(sendString);
 						String giveString = frameApp.fromServer.readLine();
 

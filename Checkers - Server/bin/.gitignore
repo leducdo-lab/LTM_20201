@@ -1,6 +1,4 @@
-/EnumConstants/
 /Manager/
-/Model/
-/SQL/
 /Session/
-/config.properties
+/SQL/
+/Model/

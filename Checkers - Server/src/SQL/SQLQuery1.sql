@@ -22,3 +22,5 @@ CREATE TABLE Room(
 select * from Room
 DELETE Room WHERE RoomID > 0
 select  * from Users
+
+ ALTER TABLE Users ADD Statuss BIT
