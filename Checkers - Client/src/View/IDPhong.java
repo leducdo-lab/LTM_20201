@@ -80,13 +80,15 @@ public class IDPhong extends JFrame {
 								JOptionPane.showMessageDialog(new JFrame(), noi[1],"Inane error", JOptionPane.ERROR_MESSAGE);
 								break;
 							case 322:
-								
-								Room room = new Room(frameApp);
 								frameApp.player.setRoomID(Integer.parseInt(noi[1].split(" ")[1].trim()));
+								frameApp.player.setPlayerID(2);
 								dispose();
+								frameApp.room = new Room(frameApp);
+								frameApp.room.waitToPlay();
 								break;
 
 							default:
+								System.out.println(code);
 								break;
 							}
 						} catch (IOException e1) {

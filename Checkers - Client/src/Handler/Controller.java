@@ -5,16 +5,18 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import EnumConstants.Checkers;
 import Model.Player;
 import Model.Square;
 import View.BoardPanel;
+import manager.ClientApp;
 
 /**
  * Client Application -> Controller
- * @author Keerthikan
+ * @author DuongHo
  * 
  * ClientApp
  */
@@ -35,13 +37,17 @@ public class Controller implements Runnable {
 	private LinkedList<Square> playableSquares;
 	//private LinkedList<Square> crossableSquares;
 	
-	public Controller(Player player, BufferedReader fromServer2, DataOutputStream output){
+	private ClientApp clientApp;
+	
+	public Controller(Player player, BufferedReader fromServer2, DataOutputStream output, ClientApp clientApp){
 		this.player = player;
 		this.fromServer = fromServer2;
 		this.toServer= output;
 		
 		selectedSquares = new LinkedList<Square>();
 		playableSquares = new LinkedList<Square>();
+		
+		this.clientApp = clientApp;
 	}
 	
 	public void setBoardPanel(BoardPanel panel){
@@ -59,7 +65,7 @@ public class Controller implements Runnable {
 			//Player One
 			if(player.getPlayerID()==Checkers.PLAYER_ONE.getValue()){
 				//wait for the notification to start
-				fromServer.read();
+			    fromServer.read();
 				player.setMyTurn(true);
 			}
 					
@@ -68,17 +74,20 @@ public class Controller implements Runnable {
 					waitForPlayerAction();
 					if(!isOver)
 						receiveInfoFromServer();
+					
 				}else if(player.getPlayerID()==Checkers.PLAYER_TWO.getValue()){
 					receiveInfoFromServer();
 					if(!isOver)
 						waitForPlayerAction();
+
 				}
 			}
 			
 			if(isOver){
 				JOptionPane.showMessageDialog(null, "Game is over",
 						"Information", JOptionPane.INFORMATION_MESSAGE, null);
-				System.exit(0);
+				clientApp.room.reset();
+				
 			}
 			
 		} catch (IOException e) {
@@ -93,24 +102,43 @@ public class Controller implements Runnable {
 	
 	private void receiveInfoFromServer() throws IOException {
 		player.setMyTurn(false);
-		int from = fromServer.read();
-		if(from==Checkers.YOU_LOSE.getValue()){
-			from = fromServer.read();
-			int to = fromServer.read();
+		
+		String give = "";
+		//JOptionPane.showMessageDialog(new JFrame(), "Client give : " + give,"Inane error", JOptionPane.ERROR_MESSAGE);
+		while(give.equals("")) {
+			give = fromServer.readLine();
+			
+		}
+		System.out.println("Give : "+give);
+		String[] noi = give.split(" ");
+		int code = Integer.parseInt(noi[0].trim());
+		if(code == 505) {
+			int from = Integer.parseInt(noi[1].trim());
+			int to = Integer.parseInt(noi[2].trim());
+			updateReceivedInfo(from, to);
+			
+		}else if(code == 369) {
+			JOptionPane.showMessageDialog(new JFrame(), "You are kicked ","Inane error", JOptionPane.ERROR_MESSAGE);
+			clientApp.room.setVisible(false);
+			clientApp.dangNhap.setVisible(true);
+			
+		}else if(code == Checkers.YOU_LOSE.getValue()) {
+			int from = Integer.parseInt(noi[1].trim());
+			int to = Integer.parseInt(noi[2].trim());
 			updateReceivedInfo(from, to);
 			isOver=true;
-		}else if(from==Checkers.YOU_WIN.getValue()){
+			
+		} else if(code == Checkers.YOU_WIN.getValue()) {
 			isOver=true;
+			clientApp.player.setSocre(clientApp.player.getSocre()+1);
+			clientApp.dangNhap.lblim.setText(clientApp.player.getSocre()+"");
 			continueToPlay=false;
-		}else{
-			int to = fromServer.read();
-			updateReceivedInfo(from, to);
 		}
 	}	
 
 	private void sendMove(Square from, Square to) throws IOException {
-		toServer.writeInt(from.getSquareID());
-		toServer.writeInt(to.getSquareID());
+		toServer.writeBytes("505 "+from.getSquareID()+" "+to.getSquareID()+" "+player.getPlayerID()+"\n");
+
 	}
 
 	private void waitForPlayerAction() throws InterruptedException {

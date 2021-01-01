@@ -4,7 +4,7 @@ import View.BoardPanel;
 
 /**
  * Client Application -> Main
- * @author Keerthikan
+ * @author DuongHo
  * 
  * Main
  */

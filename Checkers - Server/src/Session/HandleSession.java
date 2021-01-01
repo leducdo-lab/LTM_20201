@@ -2,6 +2,7 @@ package Session;
 import javax.swing.*;
 
 import EnumConstants.Checkers;
+import Manager.ExtraThread;
 import Model.Game;
 import Model.Player;
 import Model.Square;
@@ -12,22 +13,23 @@ import java.awt.*;
 
 /**
  * Server Application --> Handle Session
- * @author keerthikan
+ * @author DuongHo
  * 
  * Handle Game Logic and Player requests
  */
 public class HandleSession implements Runnable {
 	
 	private Game checkers;
-	private Player player1;
-	private Player player2;
+	
+	public ExtraThread pExtraThread1, pExtraThread2;
 	
 	private boolean continueToPlay = true;
 	
 	//Construct thread
-	public HandleSession(Socket p1, Socket p2){
-		player1 = new Player(Checkers.PLAYER_ONE.getValue(), p1);
-		player2 = new Player(Checkers.PLAYER_TWO.getValue(), p2);
+	public HandleSession(ExtraThread p1, ExtraThread p2){
+		
+		pExtraThread1 = p1;
+		pExtraThread2 = p2;
 		
 		checkers = new Game();
 	}
@@ -37,65 +39,67 @@ public class HandleSession implements Runnable {
 		//Send Data back and forth		
 		try{
 				//notify Player 1 to start
-							
-					
-					while(continueToPlay){
-						//wait for player 1's Action
-						int from = player1.receiveData();
-						int to = player1.receiveData();
+			pExtraThread1.out.writeBytes("1\n");
+
+		}catch(Exception ex){
+			System.out.println("Connection is being closed");
+
+			return;
+		}
+	}
+	
+	public void playerGo(int from, int to, int player) {
+		try{
+				
+				if(continueToPlay){
+					//wait for player 1's Action
+					if(player == 1) {
 						checkStatus(from, to);
 						updateGameModel(from, to);
 								
 						//Send Data back to 2nd Player
-						if(checkers.isOver())
-							player2.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
-						int fromStatus = player2.sendData(from);
-						int toStatus = player2.sendData(to);
-						checkStatus(fromStatus,toStatus);
-						
+						if(checkers.isOver()) {
+							//Game Over notification
+							pExtraThread2.out.writeBytes(Checkers.YOU_LOSE.getValue()+" "+from+" "+to+"\n");
+						}
+
+						pExtraThread2.out.writeBytes("505 "+from+" "+to+"\n");
+												
 						//IF game is over, break
 						if(checkers.isOver()){
-							player1.sendData(Checkers.YOU_WIN.getValue());
+							pExtraThread1.out.writeBytes(Checkers.YOU_WIN.getValue()+" "+from+" "+to+"\n");
+							pExtraThread1.updateScore();
 							continueToPlay=false;
-							break;
 						}
 						
 						System.out.println("after break");
 						
-						//wait for player 2's Action
-						from = player2.receiveData();
-						to = player2.receiveData();
+					}else if(player == 2) {				
+						
 						checkStatus(from, to);
+					
+						
 						updateGameModel(from, to);					
 						
 						//Send Data back to 1st Player
 						if(checkers.isOver()){
-							player1.sendData(Checkers.YOU_LOSE.getValue());		//Game Over notification
-						}					
-						fromStatus = player1.sendData(from);
-						toStatus = player1.sendData(to);
-						checkStatus(fromStatus,toStatus);
+							pExtraThread1.out.writeBytes(Checkers.YOU_LOSE.getValue()+" "+from+" "+to+"\n");
+						}
+						
+						System.out.println("player 2 : "+from);
+						pExtraThread1.out.writeBytes("505 "+from+" "+to+"\n");
 						
 						//IF game is over, break
 						if(checkers.isOver()){
-							player2.sendData(Checkers.YOU_WIN.getValue());
+							pExtraThread2.out.writeBytes(Checkers.YOU_WIN.getValue()+" "+from+" "+to+"\n");
+							pExtraThread2.updateScore();
 							continueToPlay=false;
-							break;
 						}
 						
 						System.out.println("second break");
 					}
-				
-				
-				
+				}
 		}catch(Exception ex){
-			System.out.println("Connection is being closed");
-			
-			if(player1.isOnline())
-				player1.closeConnection();
-			
-			if(player2.isOnline())
-				player2.closeConnection();
 			
 			return;
 		}
