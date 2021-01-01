@@ -80,11 +80,13 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(new JFrame(), "Khong nhap space","Inane error", JOptionPane.ERROR_MESSAGE);
 				}else {
 					String sendString = "501 " +nameString + " " + passwordString+"\n";
+					System.out.println(sendString);
 					try {
 						
 						frameApp.toServer.writeBytes(sendString);
 						
 						String giveString = frameApp.fromServer.readLine();
+						System.out.println(giveString);
 
 						String[] noi = giveString.split(" ", 2);
 						int code = Integer.parseInt(noi[0].trim());

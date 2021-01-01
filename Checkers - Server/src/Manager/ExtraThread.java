@@ -44,7 +44,7 @@ public class ExtraThread extends Thread {
 			
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new DataOutputStream(socket.getOutputStream());
-			while(!socket.isBound()) {
+			while(!socket.isClosed()) {
 				String string = in.readLine();
 				System.out.println("from client: "+string);
 				String[] noi = string.split(" ");
@@ -185,7 +185,7 @@ public class ExtraThread extends Thread {
 					out.writeBytes("0\n");
 					socket.close();
 					list.remove(this);
-					//this.stop();
+					this.stop();
 					break;
 				default:
 					
@@ -257,12 +257,11 @@ public class ExtraThread extends Thread {
 		
 		try {
 			Statement statement = conn.createStatement();
-			ResultSet rSet = statement.executeQuery("SELECT * FROM Users WHERE Name = '"+username+"' AND Pass = '"+password+"' AND Status = 0");
-			
+			ResultSet rSet = statement.executeQuery("SELECT * FROM Users WHERE Name = '"+username+"' AND Pass = '"+password+"' AND Statuss = 1");
 			
 			if (rSet.next()) {
 				id = rSet.getInt("UserID");
-				statement.executeUpdate("UPDATE Users SET Statuss = 1 WHERE UserID = "+id);
+				statement.executeUpdate("UPDATE Users SET Statuss = 0 WHERE UserID = "+id);
 			}
 			
 			if (id > 0) {
@@ -454,7 +453,7 @@ public class ExtraThread extends Thread {
 		Statement statement;
 		try {
 			statement = conn.createStatement();
-			statement.executeUpdate("UPDATE Users SET Statuss = 0 WHERE UserID = "+id);
+			statement.executeUpdate("UPDATE Users SET Statuss = 1 WHERE UserID = "+id);
 			if(handleSession!=null) {
 				
 				if(id == handleSession.pExtraThread1.id) {
@@ -463,7 +462,7 @@ public class ExtraThread extends Thread {
 					statement.executeUpdate("DELETE Room Where RMaster = "+id);
 					
 				}else {
-					handleSession.pExtraThread1.out.writeBytes("232 other user has out");
+					handleSession.pExtraThread1.out.writeBytes("232 other user has out\n");
 					statement.executeUpdate("UPDATE Room SET UserID = NULL Where UserID = "+id);
 				}
 				
