@@ -179,7 +179,7 @@ public class ExtraThread extends Thread {
 				case 0:
 					quit();
 					if(handleSession != null) {
-						handleSession.wait();
+						//handleSession.wait();
 						handleSession = null;
 					}
 					out.writeBytes("0\n");
@@ -198,11 +198,7 @@ public class ExtraThread extends Thread {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} 
-        
 	}
 	public Connection Connect()  {
 		// TODO Auto-generated constructor stub

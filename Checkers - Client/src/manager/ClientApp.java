@@ -53,7 +53,7 @@ public class ClientApp extends JFrame {
 
 		try {
 			PropertyManager pm = PropertyManager.getInstance();
-			address = "127.0.0.1";
+			address = "10.90.128.209";
 			port = 50800;
 
 			String name = "50800";
