@@ -141,6 +141,7 @@ public class Room extends JPanel {
 			try {
 				while(true) {
 					String give = frameApp.fromServer.readLine();
+					System.out.println(give);
 					String[] noiStrings =give.split(" ");
 					int code = Integer.parseInt(noiStrings[0].trim());
 					if(code == 503) {
