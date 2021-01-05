@@ -118,9 +118,10 @@ public class ExtraThread extends Thread {
 						int masterID = searchRoom(roomid+"", noi[1]);
 						String userNameString = getName(masterID);
 						out.writeBytes("322 "+userNameString+" "+roomid+"\n");
+						
 						for(int index = 0; index < list.size(); index++){
 							if(list.get(index).id == masterID) {
-								userNameString = getName(masterID);
+								userNameString = getName(Integer.parseInt(noi[1].trim()));
 								list.get(index).comeRoom(userNameString, noi[1]);
 								break;
 							}
@@ -179,7 +180,7 @@ public class ExtraThread extends Thread {
 				case 0:
 					quit();
 					if(handleSession != null) {
-						handleSession.wait();
+						//handleSession.wait();
 						handleSession = null;
 					}
 					out.writeBytes("0\n");
@@ -198,9 +199,6 @@ public class ExtraThread extends Thread {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} 
         
 	}
@@ -210,7 +208,8 @@ public class ExtraThread extends Thread {
 	     String sqlInstanceName = "SQLEXPRESS";
 	     String database = "Checker";
 	     String userName = "SA";
-	     String password = "123456";
+	     String password = "do@1230.com";
+	     //String password = "123456";
 	     String connectionURL = "jdbc:sqlserver://" + hostName + ":1433"
 	             + ";instance=" + sqlInstanceName + ";databaseName=" + database;
 	     Connection conn = null;
@@ -235,7 +234,7 @@ public class ExtraThread extends Thread {
 				id = rSet.getInt("UserID");
 			}
 			if(id == 0) {
-				statement.executeUpdate("INSERT INTO Users VALUES ('"+name+"','"+password+"',0,1)");
+				statement.executeUpdate("INSERT INTO Users VALUES ('"+name+"','"+password+"',0,0)");
 				rSet = statement.executeQuery("SELECT * FROM Users WHERE Name = '"+name+"' AND Pass = '"+password+"'");
 				rSet.next();
 				id = rSet.getInt("UserID");
