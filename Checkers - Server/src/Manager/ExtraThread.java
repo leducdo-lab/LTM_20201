@@ -27,7 +27,6 @@ public class ExtraThread extends Thread {
 	public Socket socket;
 	private Connection conn;
 	public HandleSession handleSession = null ;
-	//private Statement statement;
 	public BufferedReader in;
 	public DataOutputStream out;
 	
