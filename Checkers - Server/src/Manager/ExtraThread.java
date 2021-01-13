@@ -199,7 +199,6 @@ public class ExtraThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-        
 	}
 	public Connection Connect()  {
 		// TODO Auto-generated constructor stub

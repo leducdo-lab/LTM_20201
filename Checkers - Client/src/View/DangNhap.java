@@ -98,6 +98,7 @@ public class DangNhap extends JPanel {
 						frameApp.player.setRoomID(Integer.parseInt(noiStrings[1].split(" ")[1].trim()));
 						frameApp.player.setPlayerID(2);
 						frameApp.room = new Room(frameApp);
+						frameApp.room.name1.setText(noiStrings[1].split(" ")[0]);
 						frameApp.room.waitToPlay();
 						
 						break;
